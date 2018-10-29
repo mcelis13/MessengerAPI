@@ -1,0 +1,19 @@
+{
+  "name": "videochatapi",
+  "version": "1.0.0",
+  "description": "This is a basic video chat web application run on express and node.js.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcelis13/videoChatAPI.git"
+  },
+  "author": "Madeline Celis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mcelis13/videoChatAPI/issues"
+  },
+  "homepage": "https://github.com/mcelis13/videoChatAPI#readme"
+}
