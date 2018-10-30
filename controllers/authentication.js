@@ -68,7 +68,6 @@ exports.register = function(req, res, next){
       profile: {firstName: firstName, lastName: lastName}
     });
 
-    console.log(user)
     user.save(function(err, user){
       console.log(Array.from(arguments) + 'inside save')
       if(err){

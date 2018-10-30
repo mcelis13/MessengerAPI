@@ -32,6 +32,7 @@ const UserSchema = new Schema({
 
 UserSchema.pre('save', function(next){
   const user = this,
+  //the higher the salt factor the more secure but also the slower the process
       SALT_FACTOR = 5;
 
       if (!user.isModified('password')) return next();
