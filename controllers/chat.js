@@ -17,9 +17,9 @@ exports.getConversations = function(req, res, next){
       })
     //Set up an empty array to hold convesations + more recent Messages
     let fullConversations = [];
-    conversations.forEach(function(conversations){
+    conversations.forEach(function(conversation){
       Message.find({'conversationId': conversation._id})
-        .sort('_createdAt')
+        .sort('-createdAt')
         .limit(1)
         .populate({
           path: 'author',
@@ -36,4 +36,22 @@ exports.getConversations = function(req, res, next){
           }
         });
     });
+}
+
+exports.getConversation = function(res, req, next){
+  Message.find({conversationId: req.params.conversationId})
+    .select('createdAt body author')
+    .sort('-createdAt')
+    .populate({
+      path: 'author',
+      select: 'profile.firstName profile.lastName'
+    })
+    .exec(function(err, messages){
+      if(err){
+        res.send({error: err})
+        return next(err);
+      }
+
+      res.status(200).json({conversation: messages});
+    })
 }
