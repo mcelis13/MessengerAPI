@@ -4,6 +4,7 @@ const Conversation = require('../models/conversation'),
       Message = require('../models/message'),
       User = require('../models/user');
 
+//creating the function that deals with getting the user conversation/messages
 exports.getConversations = function(req, res, next){
     //Only return one conversation at a time to view
     Conversation.find({participants: req.user._id})
