@@ -7,6 +7,9 @@ const express = require('express'),
       mongoose = require('mongoose'),
       bodyParser = require('body-parser');
 
+//importing all routes
+const router = require('./router');
+
 //Starting the server
 const server = app.listen(config.port);
 console.log('Your server is running on port ' + config.port + ' madeline!');
@@ -33,3 +36,5 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+router(app);
