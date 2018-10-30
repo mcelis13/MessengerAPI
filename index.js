@@ -2,7 +2,10 @@
 const express = require('express'),
       app = express(),
       logger = require('morgan'),
-      config = require('./config/main');
+      config = require('./config/main'),
+      keys = require('./config/keys'),
+      mongoose = require('mongoose'),
+      bodyParser = require('body-parser');
 
 //Starting the server
 const server = app.listen(config.port);
@@ -19,3 +22,14 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
+
+//Connecting the Mongoose Database
+const mongoDB = `mongodb://${keys.user}:${keys.password}@${keys.service}/${keys.database}`;
+mongoose.connect(mongoDB, {useNewUrlParser: true});
+mongoose.Promise = global.Promise;
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
