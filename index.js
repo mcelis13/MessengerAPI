@@ -2,7 +2,7 @@
 const express = require('express'),
       app = express(),
       logger = require('morgan'),
-      config = require('.config/main');
+      config = require('./config/main');
 
 //Starting the server
 const server = app.listen(config.port);
