@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/mcelis13/videoChatAPI/issues"
   },
-  "homepage": "https://github.com/mcelis13/videoChatAPI#readme"
+  "homepage": "https://github.com/mcelis13/videoChatAPI#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "morgan": "^1.9.1"
+  }
 }
