@@ -29,6 +29,7 @@ app.use(function(req, res, next) {
 //Connecting the Mongoose Database
 const mongoDB = `mongodb://${keys.user}:${keys.password}@${keys.service}/${keys.database}`;
 mongoose.connect(mongoDB, {useNewUrlParser: true});
+mongoose.set('useCreateIndex', true),
 mongoose.Promise = global.Promise;
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));

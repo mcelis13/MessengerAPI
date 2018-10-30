@@ -3,7 +3,7 @@
 const passport = require('passport'),
       User = require('../models/user'),
       config = require('./main'),
-      config = require('./keys'),
+      keys = require('./keys'),
       JwtStrategy = require('passport-jwt').Strategy,
       ExtractJwt = require('passport-jwt').ExtractJwt,
       LocalStrategy = require('passport-local');
@@ -42,13 +42,13 @@ const localLogin = new LocalStrategy(localOptions, function(email, password, don
 //Setting up JWT authentication options
 const jwtOptions = {
   //telling jwt to look at the authorization header for the jwt token
-  jwtFromRequest: ExtractJwt.fromAuthHeader();
+  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
   //telling jwt where to find my secret jwt key
   secretOrKey: keys.jwt_secret_key
 };
 
 //Setting up JWT login strategy
-const jwtLogin = new jwtStrategy(jwtOptions, function(payload, done){
+const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done){
   console.log(payload);
   User.findById(payload._id, function(err, user){
     //done is a passport error first callback accepting arguments done(error, user, info)

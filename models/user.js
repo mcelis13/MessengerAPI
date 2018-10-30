@@ -3,6 +3,7 @@ const mongoose = require('mongoose'),
       bcrypt = require('bcrypt-nodejs');
 
 
+
 const UserSchema = new Schema({
   email: {
     type: String,
@@ -30,9 +31,9 @@ const UserSchema = new Schema({
 //Before the User is saved we have to hash their password
 
 UserSchema.pre('save', function(next){
-  const user = this,
+  const user = this;
   // only hash the password if it has been modified (or is new)
-  if (!user.isModified('password')) return next();
+  if (!user.isModified('password')) {return next();}
 
   // generate a salt
   //salt factor determines the number of rounds the data is processed
