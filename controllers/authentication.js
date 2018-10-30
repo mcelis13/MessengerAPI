@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken'),
       User = require('../models/user'),
       keys = require('../config/keys');
 
-function generateWebToken(user){
+function generateToken(user){
   return jwt.sign(user, keys.jwt_secret_key, {
     expiresIn: 30080 //in seconds
   });
@@ -36,14 +36,14 @@ exports.login = function(req, res, next){
 //REGISTRATION ROUTE token generation//
 
 exports.register = function(req, res, next){
-  const email = req.body.email;
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
-  const password = req.body.password;
+  const email = req.body.user.email;
+  const firstName = req.body.user.profile.firstName;
+  const lastName = req.body.user.profile.lastName;
+  const password = req.body.user.password;
 
   //return error if no email provided
   if(!email){
-    return res.status(422).send({error: 'You must enter an email addresss.'});
+    return res.status(422).send({error: `You must enter an email addresss.`});
   }
   if(!firstName || !lastName){
     return res.status(422).send({error: 'You must enter your full name.'});
@@ -68,21 +68,19 @@ exports.register = function(req, res, next){
       profile: {firstName: firstName, lastName: lastName}
     });
 
-    //AT THIS MOMENT I COULD SEND AN EMAIL TO THE USER IF I NEEDED TO CONFIRM THE EMAIL ACCOUNT
-    //BEFORE SAVING MY USER
-
+    console.log(user)
     user.save(function(err, user){
+      console.log(Array.from(arguments) + 'inside save')
       if(err){
-        //incase user was not successfully saved
         return next(err);
       }
+        //now also create a user token and respond with the new token
+        let userInfo = setUserInfo(user);
+        res.send(res.status(201).json({
+          token: 'JWT' + generateToken(userInfo),
+          user: userInfo
+        }));
 
-      //now also create a user token and respond with the new token
-      let userInfo = setUserInfo(user);
-      res.status(201).json({
-        token: 'JWT' + generateToken(userInfo),
-        user: userInfo
-      });
     });
 
   });

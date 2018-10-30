@@ -31,21 +31,20 @@ const UserSchema = new Schema({
 //Before the User is saved we have to hash their password
 
 UserSchema.pre('save', function(next){
-  const user = this;
-  // only hash the password if it has been modified (or is new)
-  if (!user.isModified('password')) {return next();}
+  const user = this,
+      SALT_FACTOR = 5;
 
-  // generate a salt
-  //salt factor determines the number of rounds the data is processed
-  //more rounds means more secure but slower process
-  return bcrypt.genSalt(5).then((salt) => {
-    // hash the password along with our new salt
-    return bcrypt.hash(user.password, salt).then((hash) => {
-      // override the cleartext password with the hashed one
-      user.password = hash;
-      return next();
-    }).catch(next);
-  }).catch(next);
+      if (!user.isModified('password')) return next();
+
+      bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
+        if (err) return next(err);
+
+        bcrypt.hash(user.password, salt, null, function(err, hash) {
+          if (err) return next(err);
+          user.password = hash;
+          next();
+        });
+      });
 });
 
 //i'm creating a user instance method called comparePassword
