@@ -46,3 +46,15 @@ UserSchema.pre('save', function(next){
     }).catch(next);
   }).catch(next);
 });
+
+//i'm creating a user instance method called comparePassword
+//bcrypt makes it easy to compare the passwords by providing us with the compare
+//function the next couple of lines are straight from documentation
+UserSchema.methods.comparePassword = function(candidatePassword, cb){
+  bcrypt.compare(candidatePassword, this.password, function(err, isMatch){
+    if(err) {return cb(err);}
+    cb(null, isMatch);
+  });
+};
+
+module.exports = mongoose.model('User', UserSchema);
