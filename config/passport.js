@@ -49,13 +49,14 @@ const jwtOptions = {
 
 //Setting up JWT login strategy
 const jwtLogin = new jwtStrategy(jwtOptions, function(payload, done){
+  console.log(payload);
   User.findById(payload._id, function(err, user){
     //done is a passport error first callback accepting arguments done(error, user, info)
     if (err){
       return done(err, false);
     }
     if (user){
-      return done(null, user)
+      return done(null, user);
     }else{
       return done(null, false);
     }
