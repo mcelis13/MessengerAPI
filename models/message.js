@@ -3,7 +3,7 @@ const mongoose = require('mongoose'),
 
 const MessageSchema = new Schema({
     conversationId: {
-      type: Schema.types.ObjectId,
+      type: Schema.Types.ObjectId,
       required: true
     },
     body: {
@@ -11,7 +11,7 @@ const MessageSchema = new Schema({
       require: true
     },
     author: {
-      type: Schema.types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'User'
     },
   },{timestamps: true});

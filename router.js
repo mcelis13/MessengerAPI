@@ -1,7 +1,7 @@
 const AuthenticationController = require('./controllers/authentication'),
+      ChatController = require('./controllers/chat'),
       express = require('express'),
       passportService = require('./config/passport'),
-      router = express.Router();
       passport = require('passport');
 
 
@@ -20,7 +20,25 @@ const REQUIRE_ADMIN = 'Admin',
 module.exports = function(app){
   //Initializing routes for authorized users/ api
   const apiRoutes = express.Router(),
-        authRoutes = express.Router();
+        authRoutes = express.Router(),
+        chatRoutes = express.Router();
+
+
+  //setting up our chat routes as a subgroup/middleware to apiRoutes
+  apiRoutes.use('/chat', chatRoutes);
+
+  //view messages to and from authentication user
+  chatRoutes.get('/', requireAuth, ChatController.getConversations);
+
+  //Retrieve single conversation
+  chatRoutes.get('/:conversationId', requireAuth, ChatController.getConversation);
+
+  //Send reply in conversation
+  chatRoutes.post('/:conversationId', requireAuth, ChatController.sendReply);
+
+  //Start new conversation
+  chatRoutes.post('/new/:recipient', requireAuth, ChatController.newConversation);
+
 
   //Set auth routes as subgroup/middleware to apiRoutes
   apiRoutes.use('/auth', authRoutes);
