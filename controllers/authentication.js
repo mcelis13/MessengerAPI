@@ -69,7 +69,7 @@ exports.register = function(req, res, next){
     });
 
     user.save(function(err, user){
-      console.log(Array.from(arguments) + 'inside save')
+      console.log(err)
       if(err){
         return next(err);
       }
@@ -79,7 +79,6 @@ exports.register = function(req, res, next){
           token: 'JWT' + generateToken(userInfo),
           user: userInfo
         }));
-
     });
 
   });
