@@ -27,6 +27,9 @@ module.exports = function(app){
   //setting up our chat routes as a subgroup/middleware to apiRoutes
   apiRoutes.use('/chat', chatRoutes);
 
+  //Start new conversation
+  chatRoutes.post('/new/:recipient', ChatController.newConversation);
+
   //view messages to and from authentication user
   chatRoutes.get('/', requireAuth, ChatController.getConversations);
 
@@ -36,8 +39,6 @@ module.exports = function(app){
   //Send reply in conversation
   chatRoutes.post('/:conversationId', requireAuth, ChatController.sendReply);
 
-  //Start new conversation
-  chatRoutes.post('/new/:recipient', requireAuth, ChatController.newConversation);
 
 
   //Set auth routes as subgroup/middleware to apiRoutes

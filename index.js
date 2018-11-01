@@ -6,13 +6,10 @@ const express = require('express'),
       keys = require('./config/keys'),
       mongoose = require('mongoose'),
       bodyParser = require('body-parser');
+      socketEvents = require('./socketEvents');
 
 //importing all routes
 const router = require('./router');
-
-//Starting the server
-const server = app.listen(config.port);
-console.log('Your server is running on port ' + config.port + ' madeline!');
 
 // Setting up basic middleware for all Express requests
 app.use(logger('dev')); // Log requests to API using morgan
@@ -39,3 +36,10 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 router(app);
+
+
+//Starting the server
+const server = app.listen(config.port);
+console.log('Your server is running on port ' + config.port + ' madeline!');
+const io = require('socket.io').listen(server);
+socketEvents(io);

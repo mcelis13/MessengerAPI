@@ -7,7 +7,7 @@ const Conversation = require('../models/conversation'),
 //creating the function that deals with getting the user conversation/messages
 exports.getConversations = function(req, res, next){
     //Only return one conversation at a time to view
-    Conversation.find({participants: req.user._id})
+    Conversation.findOne({participants: req.user._id})
       .select('_id')
       .exec(function(err, conversations){
         if(err){
@@ -15,6 +15,13 @@ exports.getConversations = function(req, res, next){
           return next(err);
         }
       })
+
+//incase you get your conversations and it turns out there are not conversations
+//for this user
+      if(conversations.length===0) {
+        return res.status(200).json({ message: "No conversations yet" });
+      }
+
     //Set up an empty array to hold convesations + more recent Messages
     let fullConversations = [];
     conversations.forEach(function(conversation){
@@ -47,6 +54,7 @@ exports.getConversation = function(res, req, next){
       select: 'profile.firstName profile.lastName'
     })
     .exec(function(err, messages){
+
       if(err){
         res.send({error: err})
         return next(err);
@@ -57,6 +65,7 @@ exports.getConversation = function(res, req, next){
 }
 
 exports.newConversation = function(res, req, next){
+  console.log(req.params)
   if(!req.params.recipient) {
     res.status(422).send({error: "Please choose a valid recipient."});
     return next();

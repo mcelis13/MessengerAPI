@@ -26,7 +26,6 @@ function setUserInfo(request){
 
 exports.login = function(req, res, next){
   let userInfo = setUserInfo(req.user);
-
   res.status(200).json({
     token: 'JWT' + generateToken(userInfo),
     user: userInfo
@@ -87,13 +86,16 @@ exports.register = function(req, res, next){
 // Role authorization check
 exports.roleAuthorization = function(role) {
   return function(req, res, next) {
+    console.log(req.user)
     const user = req.user;
-
     User.findById(user._id, function(err, foundUser) {
       if (err) {
         res.status(422).json({ error: 'No user was found.' });
         return next(err);
       }
+
+
+      console.log('Found user', foundUser)
 
       // If user is found, check role.
       if (foundUser.role == role) {
