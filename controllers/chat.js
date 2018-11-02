@@ -2,7 +2,9 @@
 
 const Conversation = require('../models/conversation'),
       Message = require('../models/message'),
-      User = require('../models/user');
+      User = require('../models/user'),
+      jwt_decode = require('jwt-decode');
+
 
 //creating the function that deals with getting the user conversation/messages
 exports.getConversations = function(req, res, next){
@@ -73,9 +75,10 @@ exports.newConversation = function(req, res, next){
     res.status(422).send({ error: 'Please enter a message.'});
     return next();
   }
-  console.log(req.headers.authorization)
+
+  let user = jwt_decode(req.headers.authorization)
   const conversation = new Conversation({
-    participants: [req.user._id, req.params.recipient]
+    participants: [user._id, req.params.recipientId]
   });
 
   conversation.save(function(err, newConversation){
@@ -87,7 +90,7 @@ exports.newConversation = function(req, res, next){
     const message = new Message({
       conversationId: newConversation._id,
       body: req.body.composedMessage,
-      author: req.user._id
+      author: user._id
     });
 
     message.save(function(err, newMessage){

@@ -86,7 +86,6 @@ exports.register = function(req, res, next){
 // Role authorization check
 exports.roleAuthorization = function(role) {
   return function(req, res, next) {
-    console.log(req.user)
     const user = req.user;
     User.findById(user._id, function(err, foundUser) {
       if (err) {
