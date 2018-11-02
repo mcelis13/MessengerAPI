@@ -41,10 +41,6 @@ exports.getConversations = function(req, res, next){
         });
       })
 
-//incase you get your conversations and it turns out there are not conversations
-//for this user
-
-    //Set up an empty array to hold convesations + more recent Messages
 
 }
 
