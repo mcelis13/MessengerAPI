@@ -9,42 +9,43 @@ const Conversation = require('../models/conversation'),
 //creating the function that deals with getting the user conversation/messages
 exports.getConversations = function(req, res, next){
     //Only return one conversation at a time to view
-    Conversation.findOne({participants: req.user._id})
+    let user = jwt_decode(req.headers.authorization)
+
+    Conversation.find({participants: user._id})
       .select('_id')
       .exec(function(err, conversations){
         if(err){
           res.send({error: err});
           return next(err);
         }
+        console.log(conversations + 'I console logged this')
+        let fullConversations = [];
+        conversations.forEach(function(conversation){
+          Message.find({'conversationId': conversation._id})
+            .sort('-createdAt')
+            //.limit(1)
+            .populate({
+              path: 'author',
+              select: 'profile.firstName profile.lastName'
+            })
+            .exec(function(err, message){
+              if(err){
+                res.send({error: err});
+                return next(err);
+              }
+              fullConversations.push(message);
+              if(fullConversations.length === conversations.length){
+                return res.status(200).json({ conversations: fullConversations});
+              }
+            });
+        });
       })
 
 //incase you get your conversations and it turns out there are not conversations
 //for this user
-      if(conversations.length===0) {
-        return res.status(200).json({ message: "No conversations yet" });
-      }
 
     //Set up an empty array to hold convesations + more recent Messages
-    let fullConversations = [];
-    conversations.forEach(function(conversation){
-      Message.find({'conversationId': conversation._id})
-        .sort('-createdAt')
-        .limit(1)
-        .populate({
-          path: 'author',
-          select: 'profile.firstName profile.lastName'
-        })
-        .exec(function(err, message){
-          if(err){
-            res.send({error: err});
-            return next(err);
-          }
-          fullConversations.push(message);
-          if(fullConversations.length === conversations.length){
-            return res.status(200).json({ conversations: fullConversations});
-          }
-        });
-    });
+
 }
 
 exports.getConversation = function(req, res, next){
@@ -107,10 +108,12 @@ exports.newConversation = function(req, res, next){
 };
 
 exports.sendReply = function(req, res, next){
+
+  let user = jwt_decode(req.headers.authorization)
   const reply = new Message({
     conversationId: req.params.conversationId,
     body: req.body.composedMessage,
-    author: req.user_id
+    author: user._id
   });
 
   reply.save(function(err, sentReply){

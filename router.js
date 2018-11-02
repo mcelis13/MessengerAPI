@@ -28,13 +28,13 @@ module.exports = function(app){
   apiRoutes.use('/chat', chatRoutes);
 
   //view messages to and from authentication user
-  chatRoutes.get('/', requireAuth, chatController.getConversations);
+  chatRoutes.get('/', chatController.getConversations);
 
   //Retrieve single conversation
-  chatRoutes.get('/:conversationId', requireAuth, chatController.getConversation);
+  chatRoutes.get('/:conversationId', chatController.getConversation);
 
   //Send reply in conversation
-  chatRoutes.post('/:conversationId', requireAuth, chatController.sendReply);
+  chatRoutes.post('/:conversationId', chatController.sendReply);
 
   //create a new conversation
   chatRoutes.post('/new/:recipientId', chatController.newConversation);
