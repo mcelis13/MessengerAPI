@@ -18,7 +18,8 @@ exports.getConversations = function(req, res, next){
           res.send({error: err});
           return next(err);
         }
-        console.log(conversations + 'I console logged this')
+
+
         let fullConversations = [];
         conversations.forEach(function(conversation){
           Message.find({'conversationId': conversation._id})
@@ -40,7 +41,6 @@ exports.getConversations = function(req, res, next){
             });
         });
       })
-
 
 }
 
