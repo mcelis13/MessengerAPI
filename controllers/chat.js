@@ -45,7 +45,7 @@ exports.getConversations = function(req, res, next){
     });
 }
 
-exports.getConversation = function(res, req, next){
+exports.getConversation = function(req, res, next){
   Message.find({conversationId: req.params.conversationId})
     .select('createdAt body author')
     .sort('-createdAt')
@@ -64,16 +64,16 @@ exports.getConversation = function(res, req, next){
     })
 }
 
-exports.newConversation = function(res, req, next){
-  console.log(req.params)
-  if(!req.params.recipient) {
+exports.newConversation = function(req, res, next){
+  if(!req.params.recipientId) {
     res.status(422).send({error: "Please choose a valid recipient."});
     return next();
   }
-  if(!res.body.composedMessage){
+  if(!req.body.composedMessage){
     res.status(422).send({ error: 'Please enter a message.'});
     return next();
   }
+  console.log(req.headers.authorization)
   const conversation = new Conversation({
     participants: [req.user._id, req.params.recipient]
   });

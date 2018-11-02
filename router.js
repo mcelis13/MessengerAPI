@@ -1,5 +1,5 @@
-const AuthenticationController = require('./controllers/authentication'),
-      ChatController = require('./controllers/chat'),
+const authenticationController = require('./controllers/authentication'),
+      chatController = require('./controllers/chat'),
       express = require('express'),
       passportService = require('./config/passport'),
       passport = require('passport');
@@ -27,28 +27,26 @@ module.exports = function(app){
   //setting up our chat routes as a subgroup/middleware to apiRoutes
   apiRoutes.use('/chat', chatRoutes);
 
-  //Start new conversation
-  chatRoutes.post('/new/:recipient', ChatController.newConversation);
-
   //view messages to and from authentication user
-  chatRoutes.get('/', requireAuth, ChatController.getConversations);
+  chatRoutes.get('/', requireAuth, chatController.getConversations);
 
   //Retrieve single conversation
-  chatRoutes.get('/:conversationId', requireAuth, ChatController.getConversation);
+  chatRoutes.get('/:conversationId', requireAuth, chatController.getConversation);
 
   //Send reply in conversation
-  chatRoutes.post('/:conversationId', requireAuth, ChatController.sendReply);
+  chatRoutes.post('/:conversationId', requireAuth, chatController.sendReply);
 
-
+  //create a new conversation
+  chatRoutes.post('/new/:recipientId', chatController.newConversation);
 
   //Set auth routes as subgroup/middleware to apiRoutes
   apiRoutes.use('/auth', authRoutes);
 
   //Registration route
-  authRoutes.post('/register', AuthenticationController.register);
+  authRoutes.post('/register', authenticationController.register);
 
   //Login Route
-  authRoutes.post('/login', requireLogin, AuthenticationController.login);
+  authRoutes.post('/login', requireLogin, authenticationController.login);
 
   //Set url for API group routes
   app.use('/api', apiRoutes);
