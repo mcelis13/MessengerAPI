@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken'),
 
 function generateToken(user){
   return jwt.sign(user, keys.jwt_secret_key, {
-    expiresIn: 30080 //in seconds
+    expiresIn: '1d'//in one day
   });
 };
 
