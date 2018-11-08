@@ -27,20 +27,20 @@ module.exports = function(app){
   //setting up our chat routes as a subgroup/middleware to apiRoutes
   apiRoutes.use('/chat', chatRoutes);
 
-  //view messages to and from authentication user
-  chatRoutes.get('/', chatController.getConversations);
-
-  //Retrieve single conversation
-  chatRoutes.get('/:conversationId', chatController.getConversation);
-
   //Send reply in conversation
   chatRoutes.post('/:conversationId', chatController.sendReply);
 
   //create a new conversation
   chatRoutes.post('/new/:recipientId', chatController.newConversation);
 
+  //get all Users
+  chatRoutes.get('/users', chatController.getUsers);
+
   //Set auth routes as subgroup/middleware to apiRoutes
   apiRoutes.use('/auth', authRoutes);
+
+  //Retrieve single conversation
+  chatRoutes.get('/:conversationId', chatController.getConversation);
 
   //Registration route
   authRoutes.post('/register', authenticationController.register);
@@ -48,6 +48,10 @@ module.exports = function(app){
   //Login Route
   authRoutes.post('/login', requireLogin, authenticationController.login);
 
+  //view messages to and from authentication user
+  chatRoutes.get('/', chatController.getConversations);
+
   //Set url for API group routes
   app.use('/api', apiRoutes);
+
 }

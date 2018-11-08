@@ -122,3 +122,14 @@ exports.sendReply = function(req, res, next){
     return(next);
   });
 }
+
+exports.getUsers = function(req, res, next) {
+  console.log(req)
+  //let user = jwt_decode(req.headers.authorization)
+  User.find()
+    .exec(function (err, users_list) {
+      if (err) { return next(err); }
+      //Successful, so render
+      res.json(users_list);
+    });
+}
