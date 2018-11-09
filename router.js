@@ -33,6 +33,9 @@ module.exports = function(app){
   //create a new conversation
   chatRoutes.post('/new/:recipientId', chatController.newConversation);
 
+  //Retrieve single user
+  chatRoutes.get('/:email', chatController.getUser);
+
   //get all Users
   chatRoutes.get('/users', chatController.getUsers);
 

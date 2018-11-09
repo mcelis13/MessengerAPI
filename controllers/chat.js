@@ -123,13 +123,30 @@ exports.sendReply = function(req, res, next){
   });
 }
 
+exports.getUser = function(req, res, next) {
+  let email = req.params.email;
+  console.log(email)
+  User.find({'email': email})
+  .exec(function(err, user){
+
+    if(err){
+      res.send({error: err})
+      return next(err);
+    }
+
+    res.status(200).json(user);
+  })
+}
+
 exports.getUsers = function(req, res, next) {
-  console.log(req)
-  //let user = jwt_decode(req.headers.authorization)
   User.find()
-    .exec(function (err, users_list) {
-      if (err) { return next(err); }
-      //Successful, so render
-      res.json(users_list);
-    });
+  .exec(function(err, users_list){
+
+    if(err){
+      res.send({error: err})
+      return next(err);
+    }
+
+    res.status(200).json(users_list);
+  })
 }
