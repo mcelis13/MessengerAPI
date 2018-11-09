@@ -40,10 +40,10 @@ module.exports = function(app){
   apiRoutes.use('/auth', authRoutes);
 
   //Retrieve single conversation
-  chatRoutes.get('/:conversationId', chatController.getConversation);
+  chatRoutes.get('conversatons/:conversationId', chatController.getConversation);
 
   //Send reply in conversation
-  chatRoutes.post('/:conversationId', chatController.sendReply);
+  chatRoutes.post('conversations/:conversationId', chatController.sendReply);
 
 
   //Registration route
