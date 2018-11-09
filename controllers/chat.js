@@ -123,9 +123,8 @@ exports.sendReply = function(req, res, next){
   });
 }
 
-exports.getUser = function(req, res, next) {
+exports.singleUser = function(req, res, next) {
   let email = req.params.email;
-  console.log(email)
   User.find({'email': email})
   .exec(function(err, user){
 
