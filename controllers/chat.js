@@ -86,6 +86,8 @@ exports.sendReply = function(req, res, next){
 exports.singleUser = function(req, res, next) {
   let email = req.params.email;
   User.find({'email': email})
+  .select('_id email password profile role createdAt')
+  .sort('-createdAt')
   .exec(function(err, user){
 
     if(err){
