@@ -13,8 +13,8 @@ exports = module.exports = function(io){
       conosle.log('left' + conversation);
     });
 
-    socket.on('new message', (conversation) => {
-      io.sockets.in(conversation).emit('refresh messages', conversation);
+    socket.on('new message', (message) => {
+      io.sockets.in(message.conversationId).broadcast.emit('new message', message);
     });
 
     socket.on('disconnect', () => {

@@ -8,63 +8,97 @@ const Conversation = require('../models/conversation'),
 
 //creating the function that deals with getting the user conversation/messages
 exports.getConversations = function(req, res, next){
-    //Only return one conversation at a time to view
     let user = jwt_decode(req.headers.authorization)
-
     Conversation.find({participants: user._id})
-      .select('_id')
-      .exec(function(err, conversations){
-        if(err){
-          res.send({error: err});
-          return next(err);
-        }
+    .exec(function(err, conversations_list){
+      console.log(conversations_list)
+      if(err){
+        res.send({error: err})
+        return next(err);
+      }
+      res.status(200).json(conversations_list);
+    })
 
-
-        let fullConversations = [];
-        conversations.forEach(function(conversation){
-          Message.find({'conversationId': conversation._id})
-            .sort('-createdAt')
-            //.limit(1)
-            .populate({
-              path: 'author',
-              select: 'profile.firstName profile.lastName'
-            })
-            .exec(function(err, message){
-              if(err){
-                res.send({error: err});
-                return next(err);
-              }
-              fullConversations.push(message);
-              if(fullConversations.length === conversations.length){
-                return res.status(200).json({ conversations: fullConversations});
-              }
-            });
-        });
-      })
+    //Only return one conversation at a time to view
+    // let user = jwt_decode(req.headers.authorization)
+    //
+    // Conversation.find({participants: user._id})
+    //   .select('_id')
+    //   .exec(function(err, conversations){
+    //     if(err){
+    //       res.send({error: err});
+    //       return next(err);
+    //     }
+    //
+    //
+    //     let fullConversations = [];
+    //     conversations.forEach(function(conversation){
+    //       Message.find({'conversationId': conversation._id})
+    //         .sort('-createdAt')
+    //         //.limit(1)
+    //         .populate({
+    //           path: 'author',
+    //           select: 'profile.firstName profile.lastName'
+    //         })
+    //         .exec(function(err, message){
+    //           if(err){
+    //             res.send({error: err});
+    //             return next(err);
+    //           }
+    //           fullConversations.push(message);
+    //           if(fullConversations.length === conversations.length){
+    //             return res.status(200).json({ conversations: fullConversations});
+    //           }
+    //         });
+    //     });
+    //   })
 
 }
 
-exports.getConversation = function(req, res, next){
-  Message.find({conversationId: req.params.conversationId})
-    .select('createdAt body author')
-    .sort('-createdAt')
-    .populate({
-      path: 'author',
-      select: 'profile.firstName profile.lastName'
-    })
-    .exec(function(err, messages){
+exports.getMessages = function(req, res, next){
+    Message.find()
+    .exec(function(err, messages_list){
 
       if(err){
         res.send({error: err})
         return next(err);
       }
 
-      res.status(200).json({conversation: messages});
+      res.status(200).json(messages_list);
     })
 }
 
-exports.sendReply = function(req, res, next){
+exports.getConversation = function(req, res, next){
+  console.log(req.params)
+    Conversation.findById(req.params.conversationId)
+      .populate({ path: 'participants', select: 'profile' })
+      .exec(function(err, participants){
+        if(err){
+          res.send({error: err})
+          return next(err);
+        }
 
+        res.status(200).json(participants)
+      });
+  // Message.find({conversationId: req.params.conversationId})
+  //   .select('createdAt body author')
+  //   .sort('-createdAt')
+  //   .populate({
+  //     path: 'author',
+  //     select: 'profile.firstName profile.lastName'
+  //   })
+  //   .exec(function(err, messages){
+  //
+  //     if(err){
+  //       res.send({error: err})
+  //       return next(err);
+  //     }
+  //
+  //     res.status(200).json({conversation: messages});
+  //   })
+}
+
+exports.sendReply = function(req, res, next){
   let user = jwt_decode(req.headers.authorization)
   const reply = new Message({
     conversationId: req.params.conversationId,
@@ -77,15 +111,15 @@ exports.sendReply = function(req, res, next){
       res.send({error: err})
       return next(err);
     }
-
-    res.status(200).json({message: 'Reply successfully sent!'});
+    console.log(sentReply)
+    res.status(200).json(sentReply);
     return(next);
   });
 }
 
 exports.singleUser = function(req, res, next) {
-  let email = req.params.email;
-  User.find({'email': email})
+  let id = req.params.id;
+  User.findById({'_id': id})
   .select('_id email password profile role createdAt')
   .sort('-createdAt')
   .exec(function(err, user){
