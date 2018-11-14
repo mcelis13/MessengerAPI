@@ -57,6 +57,7 @@ exports.getConversations = function(req, res, next){
 
 exports.getMessages = function(req, res, next){
     Message.find()
+    .populate({ path: 'author', select: 'profile' })
     .exec(function(err, messages_list){
 
       if(err){
@@ -111,7 +112,6 @@ exports.sendReply = function(req, res, next){
       res.send({error: err})
       return next(err);
     }
-    console.log(sentReply)
     res.status(200).json(sentReply);
     return(next);
   });

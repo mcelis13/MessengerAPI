@@ -1,5 +1,7 @@
-exports = module.exports = function(io){
+
+module.exports = (io) => {
   //Set socket io listeners
+  console.log('SOCKET SETUP IS BEING RUN ---------------------')
   io.on('connection', (socket) => {
     console.log('the user has been connected');
     //on conversation entry, join broadcast channel
@@ -14,7 +16,9 @@ exports = module.exports = function(io){
     });
 
     socket.on('new message', (message) => {
-      io.sockets.in(message.conversationId).broadcast.emit('new message', message);
+      console.log('this is server side', message)
+
+      socket.in(message.conversationId).broadcast.emit('new message', message);
     });
 
     socket.on('disconnect', () => {

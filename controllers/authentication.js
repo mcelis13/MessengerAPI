@@ -35,10 +35,11 @@ exports.login = function(req, res, next){
 //REGISTRATION ROUTE token generation//
 
 exports.register = function(req, res, next){
-  const email = req.body.user.email;
-  const firstName = req.body.user.profile.firstName;
-  const lastName = req.body.user.profile.lastName;
-  const password = req.body.user.password;
+  console.log(req.body)
+  const email = req.body.email;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const password = req.body.password;
 
   //return error if no email provided
   if(!email){
@@ -72,12 +73,13 @@ exports.register = function(req, res, next){
       if(err){
         return next(err);
       }
+
         //now also create a user token and respond with the new token
         let userInfo = setUserInfo(user);
-        res.send(res.status(201).json({
+        res.status(201).json({
           token: 'JWT' + generateToken(userInfo),
           user: userInfo
-        }));
+        });
     });
 
   });
