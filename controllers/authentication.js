@@ -33,12 +33,18 @@ exports.login = function(req, res, next){
 };
 
 //REGISTRATION ROUTE token generation//
+const upperCaseNames = (name) => {
+    let copy = name.slice();
+    let upperCased = copy[0].toUpperCase() + copy.slice(1);
+    return upperCased;
+}
 
 exports.register = function(req, res, next){
+  //make first and last name capitalized
   console.log(req.body)
   const email = req.body.email;
-  const firstName = req.body.firstName;
-  const lastName = req.body.lastName;
+  const firstName = upperCaseNames(req.body.firstName);
+  const lastName = upperCaseNames(req.body.lastName);
   const password = req.body.password;
 
   //return error if no email provided

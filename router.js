@@ -36,6 +36,7 @@ module.exports = function(app){
   //get all Users
   chatRoutes.get('/users', chatController.getUsers);
 
+
   //get all Messages
   chatRoutes.get('/messages', chatController.getMessages);
 
@@ -47,6 +48,12 @@ module.exports = function(app){
 
   //Retrieve single conversation
   chatRoutes.get('/conversations/:conversationId', chatController.getConversation);
+
+  //get all userConversation messages  //need to test this route and set it up in redux store if
+  //if i'm going to use it
+
+  //chatRoutes.get('/messages/:conversationId', chatController.getConversationMessages);
+
 
   //Retrieve all conversations
   chatRoutes.get('/conversations', chatController.getConversations);
