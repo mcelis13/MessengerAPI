@@ -12,7 +12,7 @@ function generateToken(user){
 
 //creating a serializer to function that sets the info that will be return
 //for the user class
-function setUserInfo(request){
+exports.setUserInfo = function(request){
   return {
     _id: request._id,
     firstName: request.firstName,
@@ -33,7 +33,7 @@ exports.login = function(req, res, next){
 };
 
 //REGISTRATION ROUTE token generation//
-const upperCaseNames = (name) => {
+exports.upperCaseNames = function(name){
     let upperCased = name[0].toUpperCase() + name.slice(1);
     return upperCased;
 }
