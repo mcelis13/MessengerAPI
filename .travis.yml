@@ -1,5 +1,6 @@
 language: node_js
 node_js:
-  - "iojs"
   - "8"
+  - "7"
+  - "6"
 #We can cache the node modules because they won't change often
