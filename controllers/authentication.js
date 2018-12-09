@@ -15,8 +15,8 @@ function generateToken(user){
 function setUserInfo(request){
   return {
     _id: request._id,
-    firstName: request.profile.firstName,
-    lastName: request.profile.lastName,
+    firstName: request.firstName,
+    lastName: request.lastName,
     email: request.email,
     role: request.role
   };
@@ -34,62 +34,63 @@ exports.login = function(req, res, next){
 
 //REGISTRATION ROUTE token generation//
 const upperCaseNames = (name) => {
-    let copy = name.slice();
-    let upperCased = copy[0].toUpperCase() + copy.slice(1);
+    let upperCased = name[0].toUpperCase() + name.slice(1);
     return upperCased;
 }
 
 exports.register = function(req, res, next){
   //make first and last name capitalized
-  console.log(req.body)
-  const email = req.body.email;
-  const firstName = upperCaseNames(req.body.firstName);
-  const lastName = upperCaseNames(req.body.lastName);
-  const password = req.body.password;
+console.log(req.body)
+const email = req.body.email;
+const firstName = upperCaseNames(req.body.firstName);
+const lastName = upperCaseNames(req.body.lastName);
+const password = req.body.password;
 
-  //return error if no email provided
-  if(!email){
-    return res.status(422).send({error: `You must enter an email addresss.`});
+//return error if no email provided
+if(!email){
+  return res.status(422).send({error: `You must enter an email addresss.`});
+}
+if(!firstName || !lastName){
+  return res.status(422).send({error: 'You must enter your full name.'});
+}
+if(!password){
+  return res.status(422).send({error: 'You must enter a password.'});
+}
+
+User.findOne({email: email}, function(err, existingUser){
+  if(err){
+    return next(err);
   }
-  if(!firstName || !lastName){
-    return res.status(422).send({error: 'You must enter your full name.'});
-  }
-  if(!password){
-    return res.status(422).send({error: 'You must enter a password.'});
+  //if the user is not unique return an error telling user already with that email address
+  if(existingUser){
+    return res.status(422).send({error: 'That email address is already in use.'});
   }
 
-  User.findOne({email: email}, function(err, existingUser){
+  //if email is unique and password was provided create an account for user
+  let user = new User({
+    email: email,
+    password: password,
+    profile: {firstName: firstName, lastName: lastName}
+  });
+
+  user.save(function(err, user){
+    console.log(err)
     if(err){
       return next(err);
     }
-    //if the user is not unique return an error telling user already with that email address
-    if(existingUser){
-      return res.status(422).send({error: 'That email address is already in use.'});
-    }
 
-    //if email is unique and password was provided create an account for user
-    let user = new User({
-      email: email,
-      password: password,
-      profile: {firstName: firstName, lastName: lastName}
-    });
-
-    user.save(function(err, user){
-      console.log(err)
-      if(err){
-        return next(err);
-      }
-
-        //now also create a user token and respond with the new token
-        let userInfo = setUserInfo(user);
-        res.status(201).json({
-          token: 'JWT' + generateToken(userInfo),
-          user: userInfo
-        });
-    });
-
+      //now also create a user token and respond with the new token
+      let userInfo = setUserInfo(user);
+      res.status(201).json({
+        token: 'JWT' + generateToken(userInfo),
+        user: userInfo
+      });
   });
+
+});
+
 };
+
 
 // Role authorization check
 exports.roleAuthorization = function(role) {
