@@ -3,6 +3,3 @@ node_js:
   - "iojs"
   - "8"
 #We can cache the node modules because they won't change often
-cache:
-  directories:
-  - node_modules
