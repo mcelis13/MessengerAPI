@@ -12,7 +12,7 @@ module.exports = (io) => {
 
     socket.on('leave conversation', (conversation) => {
       socket.leave(conversation);
-      conosle.log('left' + conversation);
+      console.log('left' + conversation);
     });
 
     socket.on('new message', (message) => {
@@ -21,6 +21,7 @@ module.exports = (io) => {
       socket.in(message.conversationId).broadcast.emit('new message', message);
     });
 
+console.log('SOCKET IS BEING DISCONNECTED--------------')
     socket.on('disconnect', () => {
       console.log('user has been disconnected');
     });
