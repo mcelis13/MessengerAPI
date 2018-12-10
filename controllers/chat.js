@@ -8,6 +8,7 @@ const Conversation = require('../models/conversation'),
 
 //creating the function that deals with getting the user conversation/messages
 exports.getConversations = function(req, res, next){
+  console.log(req, res)
     let user = jwt_decode(req.headers.authorization)
     Conversation.find({participants: user._id})
     .exec(function(err, conversations_list){
