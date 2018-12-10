@@ -14,10 +14,9 @@ You must be logged into both users to send messages and be in the same conversat
 
 In the project directory, you can run:
 
-### `npm start`
+### `nodemon index.js`
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
+Launches the server [http://localhost:3000](http://localhost:3000)
 
 
 ### `npm test`
