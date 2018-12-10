@@ -19,7 +19,7 @@ describe('setUserInfo', () => {
 });
 
 describe('generateToken', () => {
-  it('should return a user object jwt jwt_secret_key', () => {
+  it('should return an encrypted token', () => {
     authenticationFuncs.setUserInfo = jest.fn().mockReturnValue({_id: 1, firstName: 'a', lastName:'b', email:'c', password: '6', role:'m'});
 
     const result = authenticationFuncs.generateToken(authenticationFuncs.setUserInfo());
