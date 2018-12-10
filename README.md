@@ -10,8 +10,17 @@ dummy user account 2: (email: vp@gmail.com and use the password: 123)
 
 You must be logged into both users to send messages and be in the same conversation. 
 
+## Available Scripts
+
+In the project directory, you can run:
+
+### `npm start`
+
+Runs the app in the development mode.<br>
+Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
 
 
-<!-- ![](https://travis-ci.org/[mcelis13]/MessengerAPI.svg?branch=master)
+### `npm test`
 
-[![Build Status](https://travis-ci.org/mcelis13/MessengerAPI.svg?branch=master)](https://travis-ci.org/mcelis13/MessengerAPI) -->
+Launches the test runner in the interactive watch mode.<br>
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
