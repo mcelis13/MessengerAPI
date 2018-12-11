@@ -21,7 +21,6 @@ module.exports = (io) => {
       socket.in(message.conversationId).broadcast.emit('new message', message);
     });
 
-console.log('SOCKET IS BEING DISCONNECTED--------------')
     socket.on('disconnect', () => {
       console.log('user has been disconnected');
     });
